@@ -1,2 +1,2 @@
 # carousel
-[demo](http://carryguan.me/flex-add/fb1.html)
+[demo](http:https://qingyafanglu.github.io/carousel/huandengpian.html)
