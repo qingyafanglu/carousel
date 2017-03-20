@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>幻灯片</title>
+    <link href="css.css" rel="stylesheet">
+</head>
+<body>
+  <div class="slider" id="slider">
+      <div class="main" id="main-tpl">
+          <div class="main-i {{position}}" id="main-i_{{index}}">
+              <div class="caption">
+                  <h2>{{h1}}</h2>
+                  <h3>{{h2}}</h3>
+              </div>
+              <img src="image/{{index}}.jpg" class="picture" />
+          </div>
+
+
+      </div>
+      <div class="ctrl" id="ctrl-tpl">
+          <a href="javascript:onclick=chaOption({{index}})" class="ctrl-i " id="ctrl-i_{{index}}"> <img src="image/{{index}}.jpg" /></a>
+
+      </div>
+  </div>
+<script type="text/javascript">
+//1.获取数据-----------------------------
+var data=[
+    {img:1,h1:'h2caption',h2:'h3caption'},
+    {img:2,h1:'h2caption',h2:'h3caption'},
+    {img:3,h1:'h2caption',h2:'h3caption'},
+    {img:4,h1:'h2caption',h2:'h3caption'},
+    {img:5,h1:'h2caption',h2:'h3caption'},
+    {img:6,h1:'h2caption',h2:'h3caption'},
+    {img:7,h1:'h2caption',h2:'h3caption'}
+]
+
+
+//2.定义函数----------------------
+   var g = function (id){
+
+        if(id.substr(0,1)=='.'){
+            return document.getElementsByClassName(id.substr(1))
+        }
+
+        return document.getElementById(id);
+
+    }
+//3.获取模板数据-------------------
+    var tol_main=[];
+    var tol_ctrl=[];
+    var main_i_tpl=g('main-tpl').innerHTML;
+    var ctrl_i_tpl=g('ctrl-tpl').innerHTML;
+function addSlider() {
+    for (var i = 0; i < data.length; i++) {
+        var main_i_inner = main_i_tpl.replace(/{{index}}/g, data[i].img)
+                .replace(/{{h1}}/, data[i].h1)
+                .replace(/{{position}}/,(i%2==0)?'left ':'right ')
+                .replace(/{{h2}}/, data[i].h2);
+        var ctrl_i_inner = ctrl_i_tpl.replace(/{{index}}/g, data[i].img);
+        tol_main.push(main_i_inner);
+        tol_ctrl.push(ctrl_i_inner);
+    }
+
+    g('main-tpl').innerHTML = tol_main.join('');
+    g('ctrl-tpl').innerHTML = tol_ctrl.join('');
+//5 添加背景墙-----------------------------
+    g('main-tpl').innerHTML+='<div id="main-i_back" ><img src="image/{{index}}.jpg" class="picture" /></div>';
+
+
+
+}
+//4.点击切换---------------------
+function chaOption(n){
+    var cur_ctrl=g('ctrl-i_'+n);
+    var cur_main=g('main-i_'+n);
+    var tol_main=g('.main-i');
+    var tol_ctrl=g('.ctrl-i');
+    for(var i=0;i<tol_main.length;i++){
+        tol_main[i].className= tol_main[i].className.replace('active-main-i',' ');
+        tol_ctrl[i].className= tol_ctrl[i].className.replace('active-ctrl-i',' ');
+    };
+    cur_main.className+='active-main-i ';
+    cur_ctrl.className+='active-ctrl-i ';
+    var timer=setTimeout(function () {
+        g('main-i_back').innerHTML=cur_main.innerHTML;
+    },1000);
+
+}
+//5 图片  垂直居中-------------------
+function toCenter(){
+    var pics=g('.picture');
+    for(var i=0;i<pics.length;i++){
+          pics[i].style.marginTop=-250+'px';
+
+    };
+
+}
+
+
+window.onload=function(){
+
+    addSlider();
+    chaOption(1);
+   // var timer=setTimeout(toCenter,200);
+}
+
+</script>
+
+
+</body>
+</html>
